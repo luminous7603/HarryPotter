@@ -1,0 +1,166 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import HouseCard from '@/components/HouseCard.astro';
+import Card from '@/components/Card.astro';
+import UpcomingBanner from '@/components/UpcomingBanner.astro';
+import { getCollection } from 'astro:content';
+
+const featuredCharacters = (await getCollection('characters', ({ data }) => data.featured))
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 3);
+
+const latestBooks = (await getCollection('books'))
+  .sort((a, b) => b.data.number - a.data.number)
+  .slice(0, 3);
+
+const upcomingItems = await getCollection('upcoming');
+---
+
+<BaseLayout title="홈" description="해리 포터 팬페이지 — 마법 세계의 모든 것을 담다">
+  <!-- Hero -->
+  <section class="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-b from-black via-[#0d0a1e] to-[var(--color-hp-dark)]" />
+    <div
+      class="absolute inset-0 opacity-20"
+      style="background-image: radial-gradient(ellipse at 20% 50%, #740001 0%, transparent 50%), radial-gradient(ellipse at 80% 50%, #0e1a40 0%, transparent 50%);"
+    />
+    <!-- Stars -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+      {Array.from({ length: 80 }).map((_, i) => (
+        <div
+          class="absolute w-0.5 h-0.5 rounded-full bg-white"
+          style={`top: ${Math.random() * 100}%; left: ${Math.random() * 100}%; opacity: ${0.2 + Math.random() * 0.6}; animation: twinkle ${2 + Math.random() * 4}s ease-in-out infinite; animation-delay: ${Math.random() * 4}s;`}
+        />
+      ))}
+    </div>
+    <div class="relative z-10 text-center px-4 max-w-4xl mx-auto">
+      <p class="text-[var(--color-hp-gold)] text-sm uppercase tracking-[0.3em] mb-6 font-medium">
+        마법이 시작되는 곳
+      </p>
+      <h1 class="font-serif text-5xl sm:text-7xl lg:text-8xl text-white magical-glow mb-6 leading-tight">
+        해리 포터<br />
+        <span class="text-[var(--color-hp-gold)]">마법 세계</span>
+      </h1>
+      <p class="text-[var(--color-hp-parchment)]/70 text-lg sm:text-xl mb-10 max-w-2xl mx-auto leading-relaxed">
+        호그와트부터 아즈카반까지, 캐릭터부터 마법 주문까지.<br />
+        J.K. 롤링이 만든 마법의 세계를 탐험하세요.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a
+          href="/characters"
+          class="px-8 py-3 rounded-lg bg-[var(--color-hp-gold)] text-black font-medium hover:bg-[var(--color-hp-gold-light)] transition-colors"
+        >
+          캐릭터 탐험
+        </a>
+        <a
+          href="/world"
+          class="px-8 py-3 rounded-lg border border-[var(--color-hp-gold)]/40 text-[var(--color-hp-gold)] hover:bg-[var(--color-hp-gold)]/10 transition-colors"
+        >
+          세계관 둘러보기
+        </a>
+      </div>
+    </div>
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+      <svg class="w-6 h-6 text-[var(--color-hp-gold)]/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+      </svg>
+    </div>
+  </section>
+
+  <!-- Houses -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <div class="text-center mb-12">
+      <h2 class="font-serif text-3xl sm:text-4xl text-[var(--color-hp-gold)] magical-glow mb-3">
+        호그와트 4대 기숙사
+      </h2>
+      <p class="text-[var(--color-hp-parchment)]/50">당신은 어느 기숙사에 속하나요?</p>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <HouseCard house="Gryffindor" />
+      <HouseCard house="Slytherin" />
+      <HouseCard house="Ravenclaw" />
+      <HouseCard house="Hufflepuff" />
+    </div>
+  </section>
+
+  <!-- Featured Characters -->
+  {featuredCharacters.length > 0 && (
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-[var(--color-hp-gold)]/10">
+      <div class="flex items-center justify-between mb-12">
+        <h2 class="font-serif text-3xl sm:text-4xl text-[var(--color-hp-gold)] magical-glow">
+          주요 캐릭터
+        </h2>
+        <a href="/characters" class="text-[var(--color-hp-gold)]/60 hover:text-[var(--color-hp-gold)] text-sm transition-colors">
+          전체 보기 →
+        </a>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {featuredCharacters.map((char) => (
+          <Card
+            title={char.data.name}
+            description={char.body.slice(0, 120) + '...'}
+            href={`/characters/${char.slug}`}
+            badge={char.data.house !== 'None' ? char.data.house : undefined}
+          />
+        ))}
+      </div>
+    </section>
+  )}
+
+  <!-- Books Preview -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-[var(--color-hp-gold)]/10">
+    <div class="flex items-center justify-between mb-12">
+      <h2 class="font-serif text-3xl sm:text-4xl text-[var(--color-hp-gold)] magical-glow">
+        시리즈 소개
+      </h2>
+      <a href="/books" class="text-[var(--color-hp-gold)]/60 hover:text-[var(--color-hp-gold)] text-sm transition-colors">
+        전체 보기 →
+      </a>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {latestBooks.map((book) => (
+        <Card
+          title={book.data.title}
+          description={book.data.tagline}
+          href={`/books/${book.slug}`}
+          badge={`${book.data.number}권`}
+        />
+      ))}
+    </div>
+  </section>
+
+  <!-- Upcoming Content -->
+  {upcomingItems.length > 0 && (
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-[var(--color-hp-gold)]/10">
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <h2 class="font-serif text-3xl sm:text-4xl text-[var(--color-hp-gold)] magical-glow">
+            ✨ 곧 공개됩니다
+          </h2>
+          <p class="text-[var(--color-hp-parchment)]/50 mt-2">마법 세계의 새로운 이야기를 기대해주세요</p>
+        </div>
+        <a href="/upcoming" class="text-[var(--color-hp-gold)]/60 hover:text-[var(--color-hp-gold)] text-sm transition-colors">
+          전체 보기 →
+        </a>
+      </div>
+      <div class="flex flex-col gap-4">
+        {upcomingItems.map((item) => (
+          <UpcomingBanner
+            title={item.data.title}
+            type={item.data.type}
+            teaser={item.data.teaser}
+            releaseDate={item.data.releaseDate}
+            href={`/upcoming`}
+          />
+        ))}
+      </div>
+    </section>
+  )}
+</BaseLayout>
+
+<style>
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 0.9; }
+  }
+</style>

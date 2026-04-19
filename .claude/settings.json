@@ -1,0 +1,24 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/.harness/hooks/post-edit.sh \"$CLAUDE_TOOL_INPUT_FILE_PATH\""
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [{
+          "type": "command",
+          "command": "python \"${CLAUDE_SKILL_DIR}/run_phases.py\" --validate-current 2>/dev/null || true"
+        }]
+      }
+    ]
+  }
+}

@@ -1,0 +1,77 @@
+---
+const navItems = [
+  { label: '캐릭터', href: '/characters' },
+  { label: '세계관', href: '/world' },
+  { label: '시리즈', href: '/books' },
+  { label: '향후 콘텐츠', href: '/upcoming' },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header class="sticky top-0 z-50 bg-[var(--color-hp-dark)]/95 backdrop-blur-sm border-b border-[var(--color-hp-gold)]/20">
+  <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <a href="/" class="flex items-center gap-3 group">
+        <span class="text-2xl">⚡</span>
+        <span class="font-serif text-xl text-[var(--color-hp-gold)] group-hover:magical-glow transition-all">
+          The Wizarding World
+        </span>
+      </a>
+
+      <ul class="hidden md:flex items-center gap-1">
+        {navItems.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              class:list={[
+                'px-4 py-2 rounded text-sm font-medium transition-all duration-200',
+                currentPath.startsWith(item.href)
+                  ? 'text-[var(--color-hp-gold)] bg-[var(--color-hp-gold)]/10'
+                  : 'text-[var(--color-hp-parchment)]/70 hover:text-[var(--color-hp-gold)] hover:bg-[var(--color-hp-gold)]/5',
+              ]}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <button
+        id="mobile-menu-btn"
+        class="md:hidden text-[var(--color-hp-parchment)] p-2"
+        aria-label="메뉴 열기"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+
+    <div id="mobile-menu" class="md:hidden hidden pb-4">
+      <ul class="flex flex-col gap-1">
+        {navItems.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              class:list={[
+                'block px-4 py-2 rounded text-sm font-medium transition-colors',
+                currentPath.startsWith(item.href)
+                  ? 'text-[var(--color-hp-gold)] bg-[var(--color-hp-gold)]/10'
+                  : 'text-[var(--color-hp-parchment)]/70 hover:text-[var(--color-hp-gold)]',
+              ]}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </nav>
+</header>
+
+<script>
+  const btn = document.getElementById('mobile-menu-btn');
+  const menu = document.getElementById('mobile-menu');
+  btn?.addEventListener('click', () => menu?.classList.toggle('hidden'));
+</script>

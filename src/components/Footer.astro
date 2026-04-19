@@ -1,0 +1,56 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-[var(--color-hp-gold)]/20 bg-black/40 mt-16">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+      <div>
+        <h3 class="font-serif text-[var(--color-hp-gold)] text-lg mb-3">The Wizarding World</h3>
+        <p class="text-[var(--color-hp-parchment)]/50 text-sm leading-relaxed">
+          해리 포터 팬들을 위한 공간. 마법의 세계를 탐험하세요.
+        </p>
+      </div>
+      <div>
+        <h4 class="text-[var(--color-hp-parchment)]/80 font-medium mb-3 text-sm uppercase tracking-wider">둘러보기</h4>
+        <ul class="space-y-2">
+          {[
+            { label: '캐릭터', href: '/characters' },
+            { label: '세계관', href: '/world' },
+            { label: '시리즈', href: '/books' },
+            { label: '향후 콘텐츠', href: '/upcoming' },
+          ].map((link) => (
+            <li>
+              <a href={link.href} class="text-[var(--color-hp-parchment)]/50 hover:text-[var(--color-hp-gold)] text-sm transition-colors">
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-[var(--color-hp-parchment)]/80 font-medium mb-3 text-sm uppercase tracking-wider">기숙사</h4>
+        <ul class="space-y-2">
+          {[
+            { label: '그리핀도르', href: '/world/gryffindor' },
+            { label: '슬리데린', href: '/world/slytherin' },
+            { label: '래번클로', href: '/world/ravenclaw' },
+            { label: '후플푸프', href: '/world/hufflepuff' },
+          ].map((link) => (
+            <li>
+              <a href={link.href} class="text-[var(--color-hp-parchment)]/50 hover:text-[var(--color-hp-gold)] text-sm transition-colors">
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-[var(--color-hp-gold)]/10 pt-6 text-center">
+      <p class="text-[var(--color-hp-parchment)]/30 text-xs">
+        © {year} The Wizarding World Fan Page. 팬 제작 사이트로 공식 사이트와 무관합니다.
+        <br />Harry Potter & related characters are trademarks of Warner Bros. & J.K. Rowling.
+      </p>
+    </div>
+  </div>
+</footer>

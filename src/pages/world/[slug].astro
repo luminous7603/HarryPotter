@@ -1,0 +1,58 @@
+---
+import ContentLayout from '@/layouts/ContentLayout.astro';
+import HouseCard from '@/components/HouseCard.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const items = await getCollection('worldbuilding');
+  return items.map((item) => ({
+    params: { slug: item.slug },
+    props: { item },
+  }));
+}
+
+const { item } = Astro.props;
+const { Content } = await render(item);
+
+const categoryKorean: Record<string, string> = {
+  house: '기숙사',
+  spell: '마법 주문',
+  location: '장소',
+  creature: '마법 생물',
+  object: '마법 물건',
+};
+
+type House = 'Gryffindor' | 'Slytherin' | 'Ravenclaw' | 'Hufflepuff';
+const isHouse = item.data.category === 'house';
+const house = item.data.house as House | undefined;
+---
+
+<ContentLayout
+  title={item.data.title}
+  breadcrumb={[{ label: '세계관', href: '/world' }]}
+>
+  <div class="mb-8">
+    <span class="inline-block text-xs font-medium text-[var(--color-hp-gold)] uppercase tracking-wider bg-[var(--color-hp-gold)]/10 px-2 py-0.5 rounded">
+      {categoryKorean[item.data.category]}
+    </span>
+  </div>
+
+  {isHouse && house && (
+    <div class="mb-8 not-prose">
+      <HouseCard house={house} href={undefined} />
+    </div>
+  )}
+
+  <div class="text-[var(--color-hp-parchment)]/80 leading-relaxed space-y-4">
+    <Content />
+  </div>
+
+  <div class="mt-12 pt-8 border-t border-[var(--color-hp-gold)]/20">
+    <a
+      href="/world"
+      class="inline-flex items-center gap-2 text-[var(--color-hp-gold)]/60 hover:text-[var(--color-hp-gold)] transition-colors"
+    >
+      ← 세계관 목록으로
+    </a>
+  </div>
+</ContentLayout>

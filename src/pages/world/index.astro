@@ -1,0 +1,64 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import HouseCard from '@/components/HouseCard.astro';
+import Card from '@/components/Card.astro';
+import { getCollection } from 'astro:content';
+
+const allWorld = (await getCollection('worldbuilding'))
+  .sort((a, b) => a.data.order - b.data.order);
+
+const houses = allWorld.filter((w) => w.data.category === 'house');
+const others = allWorld.filter((w) => w.data.category !== 'house');
+
+const categoryKorean: Record<string, string> = {
+  spell: '마법 주문',
+  location: '장소',
+  creature: '마법 생물',
+  object: '마법 물건',
+};
+---
+
+<BaseLayout title="세계관" description="호그와트, 기숙사, 마법 주문 등 해리 포터의 세계관을 탐험하세요.">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="mb-12">
+      <h1 class="font-serif text-4xl sm:text-5xl text-[var(--color-hp-gold)] magical-glow mb-4">
+        마법 세계관
+      </h1>
+      <p class="text-[var(--color-hp-parchment)]/60 text-lg">
+        호그와트부터 마법 주문까지, 마법 세계를 탐험하세요.
+      </p>
+    </div>
+
+    <!-- Houses -->
+    <section class="mb-16">
+      <h2 class="font-serif text-2xl text-[var(--color-hp-parchment)] mb-6">
+        4대 기숙사
+      </h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <HouseCard house="Gryffindor" />
+        <HouseCard house="Slytherin" />
+        <HouseCard house="Ravenclaw" />
+        <HouseCard house="Hufflepuff" />
+      </div>
+    </section>
+
+    <!-- Other World Content -->
+    {others.length > 0 && (
+      <section>
+        <h2 class="font-serif text-2xl text-[var(--color-hp-parchment)] mb-6">
+          장소 & 마법
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {others.map((item) => (
+            <Card
+              title={item.data.title}
+              description={item.body.slice(0, 120) + '...'}
+              href={`/world/${item.slug}`}
+              badge={categoryKorean[item.data.category]}
+            />
+          ))}
+        </div>
+      </section>
+    )}
+  </div>
+</BaseLayout>

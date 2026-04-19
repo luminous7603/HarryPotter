@@ -1,0 +1,76 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import UpcomingBanner from '@/components/UpcomingBanner.astro';
+import { getCollection } from 'astro:content';
+
+const upcomingItems = await getCollection('upcoming');
+---
+
+<BaseLayout
+  title="향후 콘텐츠"
+  description="해리 포터 세계의 새로운 이야기들을 먼저 만나보세요."
+>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="mb-12 text-center">
+      <div class="text-4xl mb-4">✨</div>
+      <h1 class="font-serif text-4xl sm:text-5xl text-[var(--color-hp-gold)] magical-glow mb-4">
+        곧 공개됩니다
+      </h1>
+      <p class="text-[var(--color-hp-parchment)]/60 text-lg max-w-2xl mx-auto leading-relaxed">
+        마법 세계의 새로운 이야기들이 여러분을 기다리고 있습니다.
+        공식 발표와 함께 이 페이지가 업데이트됩니다.
+      </p>
+    </div>
+
+    {upcomingItems.length > 0 ? (
+      <div class="flex flex-col gap-4">
+        {upcomingItems.map((item) => (
+          <div class="rounded-xl border border-[var(--color-hp-gold)]/20 bg-white/5 p-6">
+            <div class="flex items-start gap-4">
+              <div class="flex-shrink-0 w-12 h-12 rounded-full bg-[var(--color-hp-gold)]/20 flex items-center justify-center">
+                <span class="text-2xl">✨</span>
+              </div>
+              <div class="flex-1">
+                <div class="flex flex-wrap items-center gap-2 mb-2">
+                  <span class="text-xs font-medium text-[var(--color-hp-gold)] uppercase tracking-wider bg-[var(--color-hp-gold)]/10 px-2 py-0.5 rounded">
+                    {item.data.type}
+                  </span>
+                  {item.data.releaseDate && (
+                    <span class="text-xs text-[var(--color-hp-parchment)]/40">
+                      {item.data.releaseDate}
+                    </span>
+                  )}
+                  {item.data.announced && (
+                    <span class="text-xs text-green-400/70 bg-green-400/10 px-2 py-0.5 rounded">
+                      공식 발표됨
+                    </span>
+                  )}
+                </div>
+                <h2 class="font-serif text-2xl text-[var(--color-hp-parchment)] mb-3">
+                  {item.data.title}
+                </h2>
+                <p class="text-[var(--color-hp-parchment)]/60 leading-relaxed">
+                  {item.data.teaser}
+                </p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    ) : (
+      <div class="text-center py-20 border border-[var(--color-hp-gold)]/10 rounded-xl bg-white/5">
+        <div class="text-5xl mb-4">🔮</div>
+        <p class="text-[var(--color-hp-parchment)]/40">
+          아직 공개된 정보가 없습니다. 곧 업데이트될 예정입니다.
+        </p>
+      </div>
+    )}
+
+    <div class="mt-16 text-center p-8 rounded-xl border border-[var(--color-hp-gold)]/20 bg-gradient-to-b from-[var(--color-hp-gold)]/5 to-transparent">
+      <h2 class="font-serif text-2xl text-[var(--color-hp-gold)] mb-3">업데이트 소식 받기</h2>
+      <p class="text-[var(--color-hp-parchment)]/50 text-sm">
+        새로운 해리 포터 관련 콘텐츠가 공개되면 이 페이지에서 가장 먼저 소개합니다.
+      </p>
+    </div>
+  </div>
+</BaseLayout>

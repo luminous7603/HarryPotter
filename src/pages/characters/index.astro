@@ -1,0 +1,49 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Card from '@/components/Card.astro';
+import { getCollection } from 'astro:content';
+
+const allCharacters = (await getCollection('characters'))
+  .sort((a, b) => a.data.order - b.data.order);
+
+const houseColors: Record<string, string> = {
+  Gryffindor: '#740001',
+  Slytherin: '#1a472a',
+  Ravenclaw: '#0e1a40',
+  Hufflepuff: '#ecb939',
+  None: '#555',
+};
+
+const houseKorean: Record<string, string> = {
+  Gryffindor: '그리핀도르',
+  Slytherin: '슬리데린',
+  Ravenclaw: '래번클로',
+  Hufflepuff: '후플푸프',
+  None: '기타',
+};
+---
+
+<BaseLayout title="캐릭터" description="해리 포터 시리즈의 모든 캐릭터를 만나보세요.">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="mb-12">
+      <h1 class="font-serif text-4xl sm:text-5xl text-[var(--color-hp-gold)] magical-glow mb-4">
+        캐릭터
+      </h1>
+      <p class="text-[var(--color-hp-parchment)]/60 text-lg">
+        마법 세계를 빛낸 인물들을 만나보세요.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {allCharacters.map((char) => (
+        <Card
+          title={char.data.name}
+          description={`${char.data.role}\n\n${char.body.slice(0, 100)}...`}
+          href={`/characters/${char.slug}`}
+          badge={char.data.house !== 'None' ? houseKorean[char.data.house] : undefined}
+          badgeColor={houseColors[char.data.house]}
+        />
+      ))}
+    </div>
+  </div>
+</BaseLayout>

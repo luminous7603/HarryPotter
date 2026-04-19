@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p \"C:/Users/joo/Documents/My Games/HarryPotter/.claude/.harness/hooks\")",
+      "Bash(mkdir -p \"C:/Users/joo/Documents/My Games/HarryPotter/.claude/.harness/artifacts\")",
+      "Bash(cp \"C:/Users/joo/Documents/My Games/HarryPotter/.claude/skills/harness/hooks/post-edit.sh\" \"C:/Users/joo/Documents/My Games/HarryPotter/.claude/.harness/hooks/post-edit.sh\")",
+      "Bash(chmod +x \"C:/Users/joo/Documents/My Games/HarryPotter/.claude/.harness/hooks/post-edit.sh\")",
+      "Bash(touch \"C:/Users/joo/Documents/My Games/HarryPotter/.claude/.harness/hooks/.registered\")"
+    ]
+  }
+}

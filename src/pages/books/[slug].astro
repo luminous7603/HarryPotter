@@ -1,0 +1,62 @@
+---
+import ContentLayout from '@/layouts/ContentLayout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const books = await getCollection('books');
+  return books.map((book) => ({
+    params: { slug: book.slug },
+    props: { book },
+  }));
+}
+
+const { book } = Astro.props;
+const { Content } = await render(book);
+---
+
+<ContentLayout
+  title={book.data.title}
+  description={book.data.tagline}
+  breadcrumb={[{ label: '시리즈', href: '/books' }]}
+>
+  <div class="mb-8 flex flex-wrap items-center gap-3">
+    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium bg-[var(--color-hp-gold)]/10 text-[var(--color-hp-gold)] border border-[var(--color-hp-gold)]/30">
+      {book.data.number}권
+    </span>
+    <span class="text-[var(--color-hp-parchment)]/40 text-sm">{book.data.year}년 출판</span>
+    {book.data.tagline && (
+      <span class="text-[var(--color-hp-parchment)]/50 text-sm italic">"{book.data.tagline}"</span>
+    )}
+  </div>
+
+  <div class="text-[var(--color-hp-parchment)]/80 leading-relaxed space-y-4">
+    <Content />
+  </div>
+
+  <div class="mt-12 pt-8 border-t border-[var(--color-hp-gold)]/20 flex items-center justify-between">
+    <a
+      href="/books"
+      class="inline-flex items-center gap-2 text-[var(--color-hp-gold)]/60 hover:text-[var(--color-hp-gold)] transition-colors"
+    >
+      ← 시리즈 목록으로
+    </a>
+    <div class="flex gap-4">
+      {book.data.number > 1 && (
+        <a
+          href={`/books/0${book.data.number - 1}-`}
+          class="text-[var(--color-hp-gold)]/40 hover:text-[var(--color-hp-gold)] text-sm transition-colors"
+        >
+          ← 이전 권
+        </a>
+      )}
+      {book.data.number < 7 && (
+        <a
+          href={`/books/0${book.data.number + 1}-`}
+          class="text-[var(--color-hp-gold)]/40 hover:text-[var(--color-hp-gold)] text-sm transition-colors"
+        >
+          다음 권 →
+        </a>
+      )}
+    </div>
+  </div>
+</ContentLayout>

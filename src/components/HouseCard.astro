@@ -1,0 +1,60 @@
+---
+type House = 'Gryffindor' | 'Slytherin' | 'Ravenclaw' | 'Hufflepuff';
+
+interface Props {
+  house: House;
+  href?: string;
+}
+
+const { house, href } = Astro.props;
+
+const houseData: Record<House, { korean: string; colors: [string, string]; symbol: string; trait: string; animal: string }> = {
+  Gryffindor: {
+    korean: '그리핀도르',
+    colors: ['#740001', '#d3a625'],
+    symbol: '🦁',
+    trait: '용기와 대담함',
+    animal: '사자',
+  },
+  Slytherin: {
+    korean: '슬리데린',
+    colors: ['#1a472a', '#aaaaaa'],
+    symbol: '🐍',
+    trait: '야망과 교활함',
+    animal: '뱀',
+  },
+  Ravenclaw: {
+    korean: '래번클로',
+    colors: ['#0e1a40', '#946b2d'],
+    symbol: '🦅',
+    trait: '지혜와 독창성',
+    animal: '독수리',
+  },
+  Hufflepuff: {
+    korean: '후플푸프',
+    colors: ['#ecb939', '#372e29'],
+    symbol: '🦡',
+    trait: '충성과 근면',
+    animal: '오소리',
+  },
+};
+
+const data = houseData[house];
+const tag = href ? 'a' : 'div';
+---
+
+<a
+  href={href ?? `/world/${house.toLowerCase()}`}
+  class="group relative overflow-hidden rounded-xl border-2 p-6 card-hover block"
+  style={`border-color: ${data.colors[0]}; background: linear-gradient(135deg, ${data.colors[0]}40, ${data.colors[0]}10);`}
+>
+  <div class="text-4xl mb-3">{data.symbol}</div>
+  <h3 class="font-serif text-2xl mb-1" style={`color: ${data.colors[1]};`}>
+    {data.korean}
+  </h3>
+  <p class="text-[var(--color-hp-parchment)]/60 text-sm">{data.trait}</p>
+  <div
+    class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+    style={`background: radial-gradient(circle at center, ${data.colors[0]}20, transparent 70%);`}
+  />
+</a>

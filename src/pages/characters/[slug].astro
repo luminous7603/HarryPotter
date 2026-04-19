@@ -1,0 +1,65 @@
+---
+import ContentLayout from '@/layouts/ContentLayout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const characters = await getCollection('characters');
+  return characters.map((char) => ({
+    params: { slug: char.slug },
+    props: { char },
+  }));
+}
+
+const { char } = Astro.props;
+const { Content } = await render(char);
+
+const houseKorean: Record<string, string> = {
+  Gryffindor: '그리핀도르',
+  Slytherin: '슬리데린',
+  Ravenclaw: '래번클로',
+  Hufflepuff: '후플푸프',
+  None: '',
+};
+
+const houseColors: Record<string, string> = {
+  Gryffindor: '#740001',
+  Slytherin: '#1a472a',
+  Ravenclaw: '#0e1a40',
+  Hufflepuff: '#ecb939',
+  None: 'transparent',
+};
+---
+
+<ContentLayout
+  title={char.data.name}
+  description={char.data.role}
+  breadcrumb={[{ label: '캐릭터', href: '/characters' }]}
+>
+  <div class="mb-8 flex flex-wrap gap-3 items-center">
+    {char.data.house !== 'None' && (
+      <span
+        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium"
+        style={`background-color: ${houseColors[char.data.house]}30; color: ${houseColors[char.data.house] === '#ecb939' ? '#a07a00' : houseColors[char.data.house]}; border: 1px solid ${houseColors[char.data.house]}50;`}
+      >
+        {houseKorean[char.data.house]}
+      </span>
+    )}
+    <span class="text-[var(--color-hp-parchment)]/50 text-sm">{char.data.role}</span>
+    {char.data.actor && (
+      <span class="text-[var(--color-hp-parchment)]/40 text-sm">배역: {char.data.actor}</span>
+    )}
+  </div>
+
+  <div class="text-[var(--color-hp-parchment)]/80 leading-relaxed space-y-4">
+    <Content />
+  </div>
+
+  <div class="mt-12 pt-8 border-t border-[var(--color-hp-gold)]/20">
+    <a
+      href="/characters"
+      class="inline-flex items-center gap-2 text-[var(--color-hp-gold)]/60 hover:text-[var(--color-hp-gold)] transition-colors"
+    >
+      ← 캐릭터 목록으로
+    </a>
+  </div>
+</ContentLayout>

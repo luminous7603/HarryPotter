@@ -1,0 +1,50 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allBooks = (await getCollection('books'))
+  .sort((a, b) => a.data.number - b.data.number);
+---
+
+<BaseLayout title="시리즈" description="해리 포터 7권 시리즈를 소개합니다.">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="mb-12">
+      <h1 class="font-serif text-4xl sm:text-5xl text-[var(--color-hp-gold)] magical-glow mb-4">
+        시리즈
+      </h1>
+      <p class="text-[var(--color-hp-parchment)]/60 text-lg">
+        J.K. 롤링의 해리 포터 7부작을 만나보세요.
+      </p>
+    </div>
+
+    <div class="flex flex-col gap-4">
+      {allBooks.map((book) => (
+        <a
+          href={`/books/${book.slug}`}
+          class="group flex items-center gap-6 rounded-xl border border-[var(--color-hp-gold)]/20 bg-white/5 p-6 card-hover hover:border-[var(--color-hp-gold)]/50"
+        >
+          <div class="flex-shrink-0 w-14 h-14 rounded-lg bg-[var(--color-hp-gold)]/10 border border-[var(--color-hp-gold)]/30 flex items-center justify-center">
+            <span class="font-serif text-xl text-[var(--color-hp-gold)]">{book.data.number}</span>
+          </div>
+          <div class="flex-1 min-w-0">
+            <h2 class="font-serif text-xl text-[var(--color-hp-parchment)] group-hover:text-[var(--color-hp-gold)] transition-colors mb-1">
+              {book.data.title}
+            </h2>
+            <div class="flex items-center gap-3 text-sm text-[var(--color-hp-parchment)]/40">
+              <span>{book.data.year}년 출판</span>
+              {book.data.tagline && (
+                <>
+                  <span>·</span>
+                  <span class="italic">{book.data.tagline}</span>
+                </>
+              )}
+            </div>
+          </div>
+          <span class="text-[var(--color-hp-gold)]/40 group-hover:text-[var(--color-hp-gold)] transition-colors text-xl flex-shrink-0">
+            →
+          </span>
+        </a>
+      ))}
+    </div>
+  </div>
+</BaseLayout>

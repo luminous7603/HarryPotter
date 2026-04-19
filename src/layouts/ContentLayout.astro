@@ -1,0 +1,33 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  breadcrumb?: { label: string; href: string }[];
+}
+
+const { title, description, breadcrumb } = Astro.props;
+---
+
+<BaseLayout title={title} description={description}>
+  <div class="max-w-4xl mx-auto px-4 py-12">
+    {breadcrumb && (
+      <nav class="mb-8 flex items-center gap-2 text-sm text-[var(--color-hp-gold)]/60">
+        <a href="/" class="hover:text-[var(--color-hp-gold)] transition-colors">홈</a>
+        {breadcrumb.map((crumb) => (
+          <>
+            <span>/</span>
+            <a href={crumb.href} class="hover:text-[var(--color-hp-gold)] transition-colors">
+              {crumb.label}
+            </a>
+          </>
+        ))}
+      </nav>
+    )}
+    <article class="prose prose-invert prose-gold max-w-none">
+      <h1 class="text-4xl font-serif text-[var(--color-hp-gold)] magical-glow mb-8">{title}</h1>
+      <slot />
+    </article>
+  </div>
+</BaseLayout>

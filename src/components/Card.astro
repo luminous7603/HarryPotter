@@ -1,0 +1,36 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+  href: string;
+  badge?: string;
+  badgeColor?: string;
+}
+
+const { title, description, href, badge, badgeColor = 'var(--color-hp-gold)' } = Astro.props;
+---
+
+<a
+  href={href}
+  class="group block rounded-lg border border-[var(--color-hp-gold)]/20 bg-white/5 p-6 card-hover hover:border-[var(--color-hp-gold)]/50"
+>
+  {badge && (
+    <span
+      class="inline-block text-xs font-medium px-2 py-0.5 rounded mb-3"
+      style={`background-color: ${badgeColor}20; color: ${badgeColor};`}
+    >
+      {badge}
+    </span>
+  )}
+  <h3 class="font-serif text-xl text-[var(--color-hp-parchment)] group-hover:text-[var(--color-hp-gold)] transition-colors mb-2">
+    {title}
+  </h3>
+  {description && (
+    <p class="text-[var(--color-hp-parchment)]/50 text-sm leading-relaxed line-clamp-3">
+      {description}
+    </p>
+  )}
+  <span class="mt-4 inline-flex items-center gap-1 text-[var(--color-hp-gold)]/60 text-sm group-hover:text-[var(--color-hp-gold)] transition-colors">
+    자세히 보기 →
+  </span>
+</a>
